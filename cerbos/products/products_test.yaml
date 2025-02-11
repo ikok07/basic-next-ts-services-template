@@ -1,0 +1,41 @@
+name: test product
+
+principals:
+  adminOne:
+    id: admin_1
+    roles:
+      - admin
+  userOne:
+    id: user_1
+    roles:
+      - user
+
+resources:
+  productOne:
+    kind: product
+    id: product_1
+
+tests:
+  - name: test product
+    input:
+      principals:
+        - adminOne
+        - userOne
+      resources:
+        - productOne
+      actions: ["select", "create", "update", "delete"]
+    expected:
+      - principal: adminOne
+        resource: productOne
+        actions:
+          select: EFFECT_ALLOW
+          create: EFFECT_ALLOW
+          update: EFFECT_ALLOW
+          delete: EFFECT_ALLOW
+      - principal: userOne
+        resource: productOne
+        actions:
+          select: EFFECT_ALLOW
+          create: EFFECT_DENY
+          update: EFFECT_DENY
+          delete: EFFECT_DENY

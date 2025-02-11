@@ -1,41 +1,38 @@
 services:
   zitadel:
+    container_name: zitadel
+    image: ghcr.io/zitadel/zitadel:latest
     restart: always
+    ports:
+      - "8080:8080"
     networks:
       - zitadel
-    image: ghcr.io/zitadel/zitadel:latest
+    env_file:
+      - .env
     command: start-from-init --masterkey "MasterkeyNeedsToHave32Characters" --tlsMode disabled
-    environment:
-      ZITADEL_LOG_LEVEL: debug
-#      ZITADEL_DEFAULTINSTANCE_ORG_HUMAN_USERNAME: admin
-#      ZITADEL_DEFAULTINSTANCE_ORG_HUMAN_PASSWORD: admin
-      ZITADEL_DATABASE_POSTGRES_HOST: postgres
-      ZITADEL_DATABASE_POSTGRES_PORT: 5432
-      ZITADEL_DATABASE_POSTGRES_DATABASE: zitadel
-      ZITADEL_DATABASE_POSTGRES_USER_USERNAME: postgres
-      ZITADEL_DATABASE_POSTGRES_USER_PASSWORD: admin
-      ZITADEL_DATABASE_POSTGRES_USER_SSL_MODE: disable
-      ZITADEL_DATABASE_POSTGRES_ADMIN_USERNAME: postgres
-      ZITADEL_DATABASE_POSTGRES_ADMIN_PASSWORD: admin
-      ZITADEL_DATABASE_POSTGRES_ADMIN_SSL_MODE: disable
-      ZITADEL_EXTERNALSECURE: false
-#      ZITADEL_TLS_ENABLED: true
-#      ZITADEL_EXTERNALDOMAIN: 6ef2jmz74iswg25kqsottrlkla.srv.us
-#      ZITADEL_EXTERNALPORT: 443
-#      ZITADEL_EXTERNALPROTOCOL: https
     depends_on:
       postgres:
         condition: "service_healthy"
+
+  cerbos:
+    container_name: cerbos
+    image: ghcr.io/cerbos/cerbos:latest
+    restart: unless-stopped
     ports:
-      - "8080:8080"
+      - "3592:3592"
+    env_file:
+      - .env
+    volumes:
+      - ./cerbos:/policies
+    command: compile /policies
   postgres:
-    image: postgres:latest
     container_name: postgres
+    image: postgres:latest
     restart: always
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_DB=zitadel
-      - POSTGRES_PASSWORD=admin
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env
     volumes:
       - pgdata:/var/lib/postgresql/data
     networks:
@@ -45,8 +42,6 @@ services:
       interval: 1s
       timeout: 5s
       retries: 10
-    ports:
-      - "5432:5432"
 volumes:
   pgdata:
 networks:
