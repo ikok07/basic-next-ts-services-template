@@ -1,0 +1,71 @@
+services:
+  zitadel:
+    restart: always
+    networks:
+      - zitadel
+    image: ghcr.io/zitadel/zitadel:latest
+    command: start-from-init --masterkey "MasterkeyNeedsToHave32Characters" --tlsMode disabled
+    environment:
+      ZITADEL_LOG_LEVEL: debug
+#      ZITADEL_DEFAULTINSTANCE_ORG_HUMAN_USERNAME: admin
+#      ZITADEL_DEFAULTINSTANCE_ORG_HUMAN_PASSWORD: admin
+      ZITADEL_DATABASE_POSTGRES_HOST: postgres
+      ZITADEL_DATABASE_POSTGRES_PORT: 5432
+      ZITADEL_DATABASE_POSTGRES_DATABASE: zitadel
+      ZITADEL_DATABASE_POSTGRES_USER_USERNAME: postgres
+      ZITADEL_DATABASE_POSTGRES_USER_PASSWORD: admin
+      ZITADEL_DATABASE_POSTGRES_USER_SSL_MODE: disable
+      ZITADEL_DATABASE_POSTGRES_ADMIN_USERNAME: postgres
+      ZITADEL_DATABASE_POSTGRES_ADMIN_PASSWORD: admin
+      ZITADEL_DATABASE_POSTGRES_ADMIN_SSL_MODE: disable
+      ZITADEL_EXTERNALSECURE: false
+#      ZITADEL_TLS_ENABLED: true
+#      ZITADEL_EXTERNALDOMAIN: 6ef2jmz74iswg25kqsottrlkla.srv.us
+#      ZITADEL_EXTERNALPORT: 443
+#      ZITADEL_EXTERNALPROTOCOL: https
+    depends_on:
+      postgres:
+        condition: "service_healthy"
+    ports:
+      - "8080:8080"
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=zitadel
+      - POSTGRES_PASSWORD=admin
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - zitadel
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 1s
+      timeout: 5s
+      retries: 10
+    ports:
+      - "5432:5432"
+volumes:
+  pgdata:
+networks:
+  zitadel:
+
+#    keycloak:
+#      image: quay.io/keycloak/keycloak:26.1.1
+#      container_name: keycloak
+#      command:
+#        - start-dev
+#      environment:
+#        - KC_BOOTSTRAP_ADMIN_USERNAME=admin
+#        - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
+#        - KC_DB=postgres
+#        - KC_DB_USERNAME=postgres
+#        - KC_DB_PASSWORD=admin
+#        - KC_DB_URL=jdbc:postgresql://postgres:5432/keycloak
+#      ports:
+#        - "8080:8080"
+#      depends_on:
+#        postgres:
+#          condition: service_healthy
