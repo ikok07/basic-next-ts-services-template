@@ -5,7 +5,7 @@
 
 ---
 ### Out of the box services
-1. Identity Provider ([Zitadel]("https://zitadel.com"))
+1. Identity Provider ([Zitadel](https://zitadel.com))
 2. RBAC ([Cerbos](https://www.cerbos.dev))
 3. Basic cerbos config files
 4. Basic k8s and docker-compose config
