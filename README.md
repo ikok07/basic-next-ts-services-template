@@ -1,7 +1,7 @@
 # Basic Backend Template
 
-[!NOTE]
-This is a template I created for my own project. Feel free to modify it as you like
+> [!NOTE]
+> This is a template I created for my own project. Feel free to modify it as you like
 
 ---
 ### Out of the box services
@@ -12,7 +12,7 @@ This is a template I created for my own project. Feel free to modify it as you l
 ---
 
 #### Start on localhost
-[!IMPORTANT]
+> [!IMPORTANT]
 > ### Make sure:
 > - You have Docker installed on your machine
 > - You have renamed the `example.env` to `.env` and provided the required environment variables
@@ -24,7 +24,7 @@ docker-compose up -d
 ---
 
 #### Start on K8S Cluster
-[!IMPORTANT]
+> [!IMPORTANT]
 > ### Make sure: 
 > - You have a working kubernetes cluster (local or cloud)
 > - You have `kubectl` installed
