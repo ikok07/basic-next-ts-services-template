@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zitadel-deployment
+spec:
+  selector:
+    matchLabels:
+      app: zitadel
+  template:
+    metadata:
+      labels:
+        app: zitadel
+    spec:
+      containers:
+        - name: zitadel
+          image: ghcr.io/zitadel/zitadel:v2.70.0
+          args: ["start-from-init", "--masterkeyFromEnv", "--tlsMode", "external"]
+          ports:
+            - containerPort: 8080
+              name: zitadel
+          envFrom:
+            - configMapRef:
+                name: zitadel-envs

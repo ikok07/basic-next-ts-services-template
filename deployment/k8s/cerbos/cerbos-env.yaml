@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cerbos-envs
+  labels:
+    app: backend
+data:
+  CERBOS_HUB_BUNDLE: "latest"
+  CERBOS_HUB_WORKSPACE_SECRET: ""
+  CERBOS_HUB_CLIENT_ID: ""
+  CERBOS_HUB_CLIENT_SECRET: ""

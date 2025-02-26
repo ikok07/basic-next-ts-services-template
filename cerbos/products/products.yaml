@@ -1,0 +1,17 @@
+apiVersion: api.cerbos.dev/v1
+resourcePolicy:
+  resource: product
+  version: default
+  rules:
+    - name: user_select_products_rule
+      actions: ["select"]
+      roles:
+        - user
+      effect: EFFECT_ALLOW
+
+    - name: admin_full_access_rule
+      actions: ["*"]
+      roles:
+        - admin
+      effect: EFFECT_ALLOW
+

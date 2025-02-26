@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cerbos-deployment
+spec:
+  selector:
+    matchLabels:
+      app: cerbos
+  template:
+    metadata:
+      labels:
+        app: cerbos
+    spec:
+      containers:
+        - name: cerbos
+          image: ghcr.io/cerbos/cerbos:latest
+          ports:
+            - containerPort: 3592
+              name: cerbos
+          envFrom:
+            - configMapRef:
+                name: cerbos-envs

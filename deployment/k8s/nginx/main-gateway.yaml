@@ -1,0 +1,20 @@
+# GUIDE: https://docs.nginx.com/nginx-gateway-fabric/how-to/traffic-management/https-termination/
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: main-gateway
+spec:
+  gatewayClassName: nginx
+  listeners:
+      - name: http
+        port: 80
+        protocol: HTTP
+
+      - name: https
+        port: 443
+        protocol: HTTPS
+        tls:
+          mode: Terminate
+          certificateRefs:
+            - kind: Secret
+              name: nginx-tls

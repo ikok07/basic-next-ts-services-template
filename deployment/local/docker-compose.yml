@@ -1,0 +1,47 @@
+services:
+  zitadel:
+    container_name: zitadel
+    image: ghcr.io/zitadel/zitadel:latest
+    restart: always
+    ports:
+      - "8080:8080"
+    networks:
+      - zitadel
+    env_file:
+      - ../../.env
+    command: start-from-init --tlsMode disabled --masterkeyFromEnv
+    depends_on:
+      postgres:
+        condition: "service_healthy"
+
+  cerbos:
+    container_name: cerbos
+    image: ghcr.io/cerbos/cerbos:latest
+    restart: unless-stopped
+    ports:
+      - "3592:3592"
+    env_file:
+      - ../../.env
+    volumes:
+      - ./cerbos:/policies
+  postgres:
+    container_name: postgres-compose
+    image: postgres:17
+    restart: always
+    ports:
+      - "5432:5432"
+    env_file:
+      - ../../.env
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - zitadel
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 1s
+      timeout: 5s
+      retries: 10
+volumes:
+  pgdata:
+networks:
+  zitadel:
