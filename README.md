@@ -1,7 +1,7 @@
 # Basic Backend Template
 
 > [!NOTE]
-> This is a template I created for my own project. Feel free to modify it as you like
+> This is a template I created for my own projects. Feel free to modify it as you like
 
 ---
 
