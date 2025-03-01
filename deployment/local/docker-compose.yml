@@ -8,10 +8,10 @@ services:
     networks:
       - zitadel
     env_file:
-      - ../../.env
+      - ./auth/.env
     command: start-from-init --tlsMode disabled --masterkeyFromEnv
     depends_on:
-      postgres:
+      zitadel-db:
         condition: "service_healthy"
 
   cerbos:
@@ -21,19 +21,17 @@ services:
     ports:
       - "3592:3592"
     env_file:
-      - ../../.env
+      - ./auth/.env
     volumes:
       - ./cerbos:/policies
-  postgres:
-    container_name: postgres-compose
+  zitadel-db:
+    container_name: zitadel-db
     image: postgres:17
     restart: always
-    ports:
-      - "5432:5432"
     env_file:
-      - ../../.env
+      - ./auth/.env
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - pgdata-zitadel:/var/lib/postgresql/data
     networks:
       - zitadel
     healthcheck:
@@ -41,7 +39,26 @@ services:
       interval: 1s
       timeout: 5s
       retries: 10
+  backend-db:
+    container_name: backend-db
+    image: postgres:17
+    restart: always
+    ports:
+      - "5432:5432"
+    env_file:
+      - ./backend/.env
+    volumes:
+      - pgdata-backend:/var/lib/postgresql/data
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 1s
+      timeout: 5s
+      retries: 10
 volumes:
-  pgdata:
+  pgdata-zitadel:
+  pgdata-backend:
 networks:
   zitadel:
+  backend:

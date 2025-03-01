@@ -1,0 +1,18 @@
+{
+  "imports": {
+    "@evyweb/ioctopus": "npm:@evyweb/ioctopus@^1.2.0",
+    "@types/pg": "npm:@types/pg@^8.11.11",
+    "axios": "npm:axios@^1.8.1",
+    "date-fns": "npm:date-fns@^4.1.0",
+    "dotenv": "npm:dotenv@^16.4.7",
+    "drizzle-kit": "npm:drizzle-kit@^0.30.5",
+    "drizzle-orm": "npm:drizzle-orm@^0.40.0",
+    "hono": "npm:hono@^4.7.2",
+    "pg": "npm:pg@^8.13.3",
+    "uuid": "npm:uuid@^11.1.0",
+    "zod": "npm:zod@^3.24.2"
+  },
+  "tasks": {
+    "run": "deno run --watch -N --allow-env --env-file=./src/adapters/config/.env.local ./src/index.ts"
+  }
+}

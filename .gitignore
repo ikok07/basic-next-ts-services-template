@@ -1,1 +1,2 @@
-.env
+deployment/local/*/.env*
+src/adapters/config/.env*

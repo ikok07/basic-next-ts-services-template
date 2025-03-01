@@ -4,28 +4,38 @@
 > This is a template I created for my own project. Feel free to modify it as you like
 
 ---
+
 ### Out of the box services
+
 1. Identity Provider ([Zitadel](https://zitadel.com))
 2. RBAC ([Cerbos](https://www.cerbos.dev))
 3. Basic cerbos config files
 4. Basic k8s and docker-compose config
+
 ---
 
 #### Start on localhost
+
 > [!IMPORTANT]
+>
 > ### Make sure:
+>
 > - You have Docker installed on your machine
-> - You have renamed the `example.env` to `.env` and provided the required environment variables
+> - You have renamed the `./deployments/local/auth/example.env` and `./deployments/local/backend/example.env` to `.env` and provided the required environment variables
 > - You are in the `./deployments/local` folder
 
 ```shell
 docker-compose up -d
 ```
+
 ---
 
 #### Start on K8S Cluster
+
 > [!IMPORTANT]
-> ### Make sure: 
+>
+> ### Make sure:
+>
 > - You have a working kubernetes cluster (local or cloud)
 > - You have `kubectl` installed
 > - You are in the `./deployments/k8s` folder
