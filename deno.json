@@ -13,6 +13,7 @@
     "zod": "npm:zod@^3.24.2"
   },
   "tasks": {
-    "run": "deno run --watch -N --allow-env --env-file=./src/adapters/config/.env.local ./src/index.ts"
+    "docker-run": "deno run --watch -N --allow-env ./src/index.ts",
+    "drizzle-kit": "deno run --node-modules-dir -A --env-file=./deployment/local/backend/.env npm:drizzle-kit"
   }
 }

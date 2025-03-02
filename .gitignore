@@ -1,2 +1,2 @@
 deployment/local/*/.env*
-src/adapters/config/.env*
+node_modules

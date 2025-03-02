@@ -5,13 +5,11 @@ services:
     restart: always
     ports:
       - "8080:8080"
-    networks:
-      - zitadel
     env_file:
       - ./auth/.env
     command: start-from-init --tlsMode disabled --masterkeyFromEnv
     depends_on:
-      zitadel-db:
+      postgres:
         condition: "service_healthy"
 
   cerbos:
@@ -24,41 +22,37 @@ services:
       - ./auth/.env
     volumes:
       - ./cerbos:/policies
-  zitadel-db:
-    container_name: zitadel-db
+  backend:
+    container_name: backend
+    build: ../..
+    ports:
+      - "8081:8081"
+    extra_hosts:
+      - "localhost:host-gateway"
+    volumes:
+      - ../../:/app
+    env_file:
+      - ./backend/.env
+    environment:
+      # override because of drizzle commands on host machine
+      - DB_URL=postgresql://postgres:admin@postgres:5432/zitadel
+    depends_on:
+      postgres:
+        condition: "service_healthy"
+  postgres:
+    container_name: postgres
     image: postgres:17
     restart: always
     env_file:
       - ./auth/.env
-    volumes:
-      - pgdata-zitadel:/var/lib/postgresql/data
-    networks:
-      - zitadel
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready"]
-      interval: 1s
-      timeout: 5s
-      retries: 10
-  backend-db:
-    container_name: backend-db
-    image: postgres:17
-    restart: always
     ports:
       - "5432:5432"
-    env_file:
-      - ./backend/.env
     volumes:
-      - pgdata-backend:/var/lib/postgresql/data
-    networks:
-      - backend
+      - pgdata:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready"]
       interval: 1s
       timeout: 5s
       retries: 10
 volumes:
-  pgdata-zitadel:
-  pgdata-backend:
-networks:
-  zitadel:
-  backend:
+  pgdata:

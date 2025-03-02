@@ -50,7 +50,9 @@ export class ZitadelProviderService implements IIdentityProviderService {
     );
     params.set("code_challenge", codeChallenge);
 
-    return `${this.baseUrl}/oauth/v2/authorize?${params}`;
+    return `${
+      Deno.env.get("IP_EXTERNAL_URL") ?? this.baseUrl
+    }/oauth/v2/authorize?${params}`;
   }
 
   async getAccessToken({
@@ -116,8 +118,8 @@ export class ZitadelProviderService implements IIdentityProviderService {
       if (error) throw new Error("No access or refresh token found!");
 
       return {
-        refreshToken: data.refresh_token,
         accessToken: data.access_token,
+        refreshToken: data.refresh_token,
       };
     } catch (err) {
       throw new AuthenticationError(`Could not refresh access token! ${err}`);

@@ -21,7 +21,7 @@
 > ### Make sure:
 >
 > - You have Docker installed on your machine
-> - You have renamed the `./deployments/local/auth/example.env` and `./deployments/local/backend/example.env` to `.env` and provided the required environment variables
+> - You have renamed the `./deployments/local/auth/example.env` to `.env` and provided the required environment variables
 > - You are in the `./deployments/local` folder
 
 ```shell
